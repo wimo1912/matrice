@@ -23,6 +23,7 @@ jobs:
       - name: Install dependencies and test
         run: |
           npm install
+           chmod +x ./node_modules/.bin/jest || echo "No jest binary found"
           npm run build --if-present
           npm test
 
@@ -57,14 +58,15 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_16F4D13EBC154074A172E6D596191CC4 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_4D9FBF32CB60442A89D06FD8C89EDDEA }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_F52EB737B769471FB8236D2ECAC46F45 }}
 
+        client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}
+        tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
+        subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
+        auth-type: oidc
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: visit-counter-app-123
-          slot-name: Production
-          package: .
+        app-name: visit-counter-app-123
+        slot-name: Production
+        package: .

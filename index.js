@@ -1,12 +1,15 @@
 // index.js
-const os = require('os');
+const express = require('express');
+const app = express();
+const port = process.env.PORT || 3000;
 
-function sayHello(name = "dev") {
-  return `👋 Hello ${name} from ${os.platform()} with Node ${process.version}`;
-}
+let count = 0;
 
-if (require.main === module) {
-  console.log(sayHello("Zineb"));
-}
+app.get('/', (req, res) => {
+  count++;
+  res.send(`<h1>👋 Visites : ${count}</h1>`);
+});
 
-module.exports = { sayHello };
+app.listen(port, () => {
+  console.log(`✅ Serveur en écoute sur http://localhost:${port}`);
+});
